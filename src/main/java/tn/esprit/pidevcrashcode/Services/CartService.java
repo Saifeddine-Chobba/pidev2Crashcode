@@ -15,7 +15,7 @@ import tn.esprit.pidevcrashcode.Entities.Product;
 import tn.esprit.pidevcrashcode.Repositories.CartRepository;
 
 @Service
-public class CartService {
+public class CartService implements ICartService {
 
     @Autowired
     private CartRepository cartRepository;
