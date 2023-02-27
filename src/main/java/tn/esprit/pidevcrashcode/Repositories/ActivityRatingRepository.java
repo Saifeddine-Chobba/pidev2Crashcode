@@ -2,9 +2,8 @@ package tn.esprit.pidevcrashcode.Repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import tn.esprit.pidevcrashcode.Entities.Cart;
+import tn.esprit.pidevcrashcode.Entities.ActivityRating;
 
 @Repository
-public interface CartRepository extends JpaRepository<Cart, Integer> {
-
+public interface ActivityRatingRepository extends JpaRepository<ActivityRating,Integer> {
 }
