@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -20,8 +22,14 @@ public class ActivityRating implements Serializable {
     private int idActivityRating;
     private String username; //username jibou mel funcion getCurrentUser ;
     private int ratingValue; //1--> 5
-    @Temporal(TemporalType.DATE)
-    private Date dateRating;
+    private Timestamp dateRate=new Timestamp((new Date()).getTime());
     @ManyToOne()
     private Activity activity;
+    @PrePersist
+    public void prePersist(){
+        Calendar cal=Calendar.getInstance();
+        cal.setTime(dateRate);
+        cal.add(Calendar.HOUR_OF_DAY,1);
+        dateRate=new Timestamp(cal.getTime().getTime());
+    }
 }

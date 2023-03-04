@@ -35,4 +35,10 @@ public class AtivityRateControleur {
     public void  delateActivityRating (@PathVariable ("ActivityRating") Integer activityRateId) {
         iActivityRatingService.deleteActivityRating(activityRateId);
     }
+    @PostMapping("/addActivityRatingAndAssign/{ActivityRating}")
+    public void addActivityRatingAndAssign(@RequestBody ActivityRating activityRatingc,@PathVariable ("ActivityRating") int idActivity ){
+       iActivityRatingService.addActivityAndAssignToActivityRating(activityRatingc,idActivity);
+    }
+
+
 }

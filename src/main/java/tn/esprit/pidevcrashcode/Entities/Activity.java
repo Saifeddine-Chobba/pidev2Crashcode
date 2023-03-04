@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -31,4 +32,6 @@ public class Activity implements Serializable {
     private Set<ActivityRating> activityRatings = new HashSet<>();
     @ManyToMany(mappedBy = "favoriteActivities",cascade = CascadeType.REMOVE)
     private Set<User> favoringUserSet;
+    @ManyToMany(mappedBy = "supportedActivities")
+    private List<CampingCenter> campingCenters;
 }

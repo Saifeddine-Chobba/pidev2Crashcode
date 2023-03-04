@@ -27,8 +27,8 @@ public class CampingCenter implements Serializable {
     private float rating;
     private int capacity;
     private int availableSpots;
-    @ElementCollection
-    private List<String> supportedActivities; // list feha asemi les activite  mawjoudin fi camp center
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    private List<Activity> supportedActivities; // list feha asemi les activite  mawjoudin fi camp center
     @Enumerated(EnumType.STRING)
     private  CampingCenterCategory category;
     private float price; //soum reservation 1 jour mtaa abd wehed

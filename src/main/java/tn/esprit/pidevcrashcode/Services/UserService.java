@@ -22,7 +22,7 @@ public class UserService {
      */
 
     public User getCurrentUser(){         //taatik el user li aaml login
-        String username = "test";      //asnaa user w baddel el username mtaa l user li thb testi bih
+        String username = "dhia";      //asnaa user w baddel el username mtaa l user li thb testi bih
         return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Current user not found"));
     }
 

@@ -23,7 +23,9 @@ IComplaintService iComplaintService;
         return iComplaintService.retrieveComplaint(complaintId);
     }
     @PostMapping("/addComplaint")
-    public Complaint addComplaint(@RequestBody  Complaint c ){
+    public Complaint addComplaint( @RequestBody  Complaint c ){
+        String sentiment = iComplaintService.getOverallSentiment(c);
+        c.setSentiment(sentiment);
         Complaint complaint= iComplaintService.addComplaint(c);
         return complaint ;
     }
@@ -36,4 +38,25 @@ IComplaintService iComplaintService;
     public void  delateComplaint (@PathVariable ("complaintid") Integer complaintid) {
         iComplaintService.deleteComplaint(complaintid);
     }
+
+    @PostMapping("/add-assignComplaint/{id-user}")
+    public void addAndAssignComplaint(@RequestBody  Complaint c ,@PathVariable("id-user")int idUser){
+    iComplaintService.AddComplaintAndAssignToUser(c,idUser);
+    }
+    @GetMapping("/MostClaimedService/{TypeComplain}")
+    public int MostClaimedService(@PathVariable("TypeComplain")String service){
+        return iComplaintService.MostClaimedService(service);
+    }
+    @GetMapping("/getSentiment")
+    public List<String> getSentiment (@RequestBody String text){
+        return iComplaintService.getSentiment(text);
+    }
+    @GetMapping("/getSectorsWithSentiments")
+    public List<List<String>> getSectorsWithSentiments(){
+        return iComplaintService.getSectorsWithSentiments();
+    }
+
+
+
+
 }

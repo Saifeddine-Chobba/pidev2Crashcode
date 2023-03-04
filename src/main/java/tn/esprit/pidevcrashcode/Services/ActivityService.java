@@ -1,19 +1,32 @@
 package tn.esprit.pidevcrashcode.Services;
 
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidevcrashcode.Entities.Activity;
+import tn.esprit.pidevcrashcode.Entities.ActivityRating;
+import tn.esprit.pidevcrashcode.Entities.CampingCenter;
+import tn.esprit.pidevcrashcode.Entities.User;
 import tn.esprit.pidevcrashcode.Repositories.ActivityRepository;
+import tn.esprit.pidevcrashcode.Repositories.CampCenterRepository;
+import tn.esprit.pidevcrashcode.Repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class ActivityService implements IActivityService {
     @Autowired
     ActivityRepository activityRepository;
+    @Autowired
+    CampCenterRepository campCenterRepository;
+    @Autowired
+    UserRepository userRepository;
     @Override
     public List<Activity> retrieveAllActivity() {
         return activityRepository.findAll();
@@ -39,4 +52,67 @@ public class ActivityService implements IActivityService {
     public Activity retrieveActivity(Integer id) {
         return activityRepository.findById(id).get();
     }
+
+    @Override
+    public void addActivityAndAssignToCamCenter(Activity activity, int idCampCenter) {
+        CampingCenter campingCenter=campCenterRepository.findById(idCampCenter).get();
+        if(activity.getCampingCenters()==null){
+            List<CampingCenter> L =new ArrayList<>();
+            L.add(campingCenter);
+            activity.setCampingCenters(L);
+        }
+        else{
+        List<CampingCenter> L=activity.getCampingCenters();
+        L.add(campingCenter);
+        activity.setCampingCenters(L);
+        }
+        activityRepository.save(activity);
+    }
+
+    @Override
+    public float AverageRating(int id) {
+        Activity activity=activityRepository.findById(id).get();
+        float Average=0;
+        Set<ActivityRating> ratings=activity.getActivityRatings();
+        for (ActivityRating activityRating:ratings){
+            Average=Average+activityRating.getRatingValue();
+        }
+        return Average/(ratings.size())  ;
+    }
+
+    @Override
+    public void AddTofavorites(int idActivity, int idUser) {
+        Activity activity=activityRepository.findById(idActivity).get();
+        User user=userRepository.findById(idUser).get();
+        Set<Activity> activities = user.getFavoriteActivities();
+        activities.add(activity);
+        user.setFavoriteActivities(activities);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void delateFavoritActivities(int idActivity, int idUser) {
+        Activity activity=activityRepository.findById(idActivity).get();
+        User user=userRepository.findById(idUser).get();
+        Set<Activity> activities = user.getFavoriteActivities();
+        activities.remove(activity);
+        user.setFavoriteActivities(activities);
+        userRepository.save(user);
+    }
+
+    @Override
+    public List<Activity> suggestActivities( int idCampCenter) {
+        CampingCenter campingCenter=campCenterRepository.findById(idCampCenter).get();
+        List<Activity> activities=null;
+        for (Activity a:activityRepository.findAll()){
+            if (a.getTypeActivity().toString().equals(campingCenter.getCategory().toString())){
+                activities.add(a);
+            }
+        }
+
+        return activities;
+    }
+
+
+
 }
