@@ -122,20 +122,19 @@ public class ComplaintService  implements IComplaintService {
         }
 
         int negative = Collections.frequency(sentiments,"Negative");
-        int neutral = Collections.frequency(sentiments,"Neutral");
         int positive = Collections.frequency(sentiments,"Positive");
         if (sentiments.size() == 0) {return "Neutral";}
 
-        float sentimentScore = (negative*(-1) + positive*1)/sentiments.size();
+        float sentimentScore =(float) ((negative*(-1) + positive));
 
-        int finalScore = Math.round(sentimentScore);
 
-        if (finalScore == 0){
+        if (sentimentScore == 0){
             return "Neutral";
-        } else if (finalScore == -1) {
+        }
+        else if (sentimentScore  <0 ) {
             return "Negative";
         }
-        else if (finalScore == 1){
+        else if (sentimentScore >0){
             return "Positive";
         }
         else {
