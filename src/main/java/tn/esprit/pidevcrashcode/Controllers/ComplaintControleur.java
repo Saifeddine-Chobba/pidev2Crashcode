@@ -56,6 +56,11 @@ IComplaintService iComplaintService;
         return iComplaintService.getSectorsWithSentiments();
     }
 
+    @PutMapping("/respondToComplaint")
+    public Complaint respondToComplaint(@RequestBody Complaint complaint,@RequestBody String response){
+        return iComplaintService.respondToComplaint(complaint,response);
+    }
+
 
 
 

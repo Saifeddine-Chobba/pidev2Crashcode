@@ -26,6 +26,10 @@ public class Complaint implements Serializable {
     private Timestamp dateComplaint=new Timestamp((new Date()).getTime());
     @Column( columnDefinition = "TEXT")
     private String description;
+    @Column( columnDefinition = "TEXT")
+    private String response;
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.Ongoing;
     @Column(nullable = true)
     private String imageName;  // esm image li yhabatha l user bil upload
     private String sentiment;

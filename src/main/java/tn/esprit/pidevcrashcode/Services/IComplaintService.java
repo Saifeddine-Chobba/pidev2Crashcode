@@ -4,6 +4,7 @@ package tn.esprit.pidevcrashcode.Services;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidevcrashcode.Entities.Complaint;
+import tn.esprit.pidevcrashcode.Entities.Status;
 import tn.esprit.pidevcrashcode.Entities.TypeComplaint;
 
 import java.util.List;
@@ -29,5 +30,9 @@ public interface IComplaintService {
     public String getSectorSentiment(TypeComplaint sector);
 
     public List<List<String>> getSectorsWithSentiments();
+
+    void updateStatus(Complaint complaint,Status status);
+
+    Complaint respondToComplaint(Complaint complaint, String response);
 
 }

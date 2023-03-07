@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidevcrashcode.Entities.Complaint;
+import tn.esprit.pidevcrashcode.Entities.Status;
 import tn.esprit.pidevcrashcode.Entities.TypeComplaint;
 import tn.esprit.pidevcrashcode.Entities.User;
 import tn.esprit.pidevcrashcode.Repositories.ComplaintRepository;
@@ -150,4 +151,19 @@ public class ComplaintService  implements IComplaintService {
         }
         return sectorsAndSentiments;
     }
+
+    @Override
+    public void updateStatus(Complaint complaint, Status status) {
+        complaint.setStatus(status);
+        addComplaint(complaint);
+    }
+
+    @Override
+    public Complaint respondToComplaint(Complaint complaint, String response) {
+        complaint.setResponse(response);
+        updateStatus(complaint,Status.Resolved);
+        addComplaint(complaint);
+        return complaint;
+    }
+
 }

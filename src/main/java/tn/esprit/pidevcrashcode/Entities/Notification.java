@@ -34,4 +34,7 @@ public class Notification implements Serializable {
         cal.add(Calendar.HOUR_OF_DAY,1);
         dateNotification=new Timestamp(cal.getTime().getTime());
     }
+
+
+
 }

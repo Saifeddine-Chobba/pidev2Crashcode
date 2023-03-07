@@ -32,6 +32,6 @@ public class Activity implements Serializable {
     private Set<ActivityRating> activityRatings = new HashSet<>();
     @ManyToMany(mappedBy = "favoriteActivities",cascade = CascadeType.REMOVE)
     private Set<User> favoringUserSet;
-    @ManyToMany(mappedBy = "supportedActivities")
-    private List<CampingCenter> campingCenters;
+//    @ManyToMany(mappedBy = "supportedActivities")
+//    private List<CampingCenter> campingCenters;
 }

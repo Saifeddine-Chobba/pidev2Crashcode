@@ -2,18 +2,25 @@ package tn.esprit.pidevcrashcode.Controllers;
 
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.pidevcrashcode.Entities.Activity;
 import tn.esprit.pidevcrashcode.Entities.Complaint;
+import tn.esprit.pidevcrashcode.Entities.TypeActivity;
+import tn.esprit.pidevcrashcode.Entities.User;
 import tn.esprit.pidevcrashcode.Services.IActivityService;
+import tn.esprit.pidevcrashcode.Services.UserService;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/Activity")
 public class ActivityControleur {
     IActivityService iActivityService;
+    @Autowired
+    UserService userService;
 
     @GetMapping("/retriveAllActivity")
     public List<Activity> getActivity(){
@@ -39,10 +46,10 @@ public class ActivityControleur {
         iActivityService.deleteActivity(activityId);
     }
 
-    @PostMapping("/addActivityAndAssignToCamCenter/{idCampCenter}")
-    public void addActivityAndAssignToCamCenter(@RequestBody  Activity activity , @PathVariable("idCampCenter")int idCampCenter){
-        iActivityService.addActivityAndAssignToCamCenter(activity,idCampCenter);
-    }
+//    @PostMapping("/addActivityAndAssignToCamCenter/{idCampCenter}")
+//    public void addActivityAndAssignToCamCenter(@RequestBody  Activity activity , @PathVariable("idCampCenter")int idCampCenter){
+//        iActivityService.addActivityAndAssignToCamCenter(activity,idCampCenter);
+//    }
     @GetMapping("/RateActivityMoy/{ActivityId}")
     public float Moyenne(@PathVariable("ActivityId")int id){
         return iActivityService.AverageRating(id);
@@ -62,7 +69,12 @@ public class ActivityControleur {
         return iActivityService.suggestActivities(idCampCenter);
     }
 
-
+    @GetMapping("/suggestActivitiesByPreference")
+    public Set<Activity> suggestActivitiesByPreference (){
+        User user = userService.getCurrentUser();
+        Set<Activity> preferences = user.getFavoriteActivities();
+        return iActivityService.suggestActivitiesByPreference(preferences);
+    }
 
 
 

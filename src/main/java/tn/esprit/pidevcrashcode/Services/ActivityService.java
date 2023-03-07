@@ -5,15 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tn.esprit.pidevcrashcode.Entities.Activity;
-import tn.esprit.pidevcrashcode.Entities.ActivityRating;
-import tn.esprit.pidevcrashcode.Entities.CampingCenter;
-import tn.esprit.pidevcrashcode.Entities.User;
+import tn.esprit.pidevcrashcode.Entities.*;
 import tn.esprit.pidevcrashcode.Repositories.ActivityRepository;
 import tn.esprit.pidevcrashcode.Repositories.CampCenterRepository;
 import tn.esprit.pidevcrashcode.Repositories.UserRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -53,21 +51,21 @@ public class ActivityService implements IActivityService {
         return activityRepository.findById(id).get();
     }
 
-    @Override
-    public void addActivityAndAssignToCamCenter(Activity activity, int idCampCenter) {
-        CampingCenter campingCenter=campCenterRepository.findById(idCampCenter).get();
-        if(activity.getCampingCenters()==null){
-            List<CampingCenter> L =new ArrayList<>();
-            L.add(campingCenter);
-            activity.setCampingCenters(L);
-        }
-        else{
-        List<CampingCenter> L=activity.getCampingCenters();
-        L.add(campingCenter);
-        activity.setCampingCenters(L);
-        }
-        activityRepository.save(activity);
-    }
+//    @Override
+//    public void addActivityAndAssignToCamCenter(Activity activity, int idCampCenter) {
+//        CampingCenter campingCenter=campCenterRepository.findById(idCampCenter).get();
+//        if(activity.getCampingCenters()==null){
+//            List<CampingCenter> L =new ArrayList<>();
+//            L.add(campingCenter);
+//            activity.setCampingCenters(L);
+//        }
+//        else{
+//        List<CampingCenter> L=activity.getCampingCenters();
+//        L.add(campingCenter);
+//        activity.setCampingCenters(L);
+//        }
+//        activityRepository.save(activity);
+//    }
 
     @Override
     public float AverageRating(int id) {
@@ -112,6 +110,38 @@ public class ActivityService implements IActivityService {
 
         return activities;
     }
+    @Override
+    public Set<Activity> suggestActivitiesByPreference(Set<Activity> preferences ){
+        if (preferences.isEmpty()){
+            return new HashSet<>();
+        }
+        if (preferences.size() == 4){
+            return preferences;
+        }
+        if (preferences.size() > 4){
+            while(preferences.size() > 4){
+                preferences.remove(0);
+            }
+            return preferences;
+        }
+
+        Set<Activity> toBeChecked = new HashSet<>();
+        //find all activities to check
+        for (Activity activity : preferences){
+            toBeChecked.addAll(getActivitiesOfType(activity.getTypeActivity()));
+        }
+
+        while(toBeChecked.size() > 4 ){
+            toBeChecked.remove(0);
+        }
+        return toBeChecked;
+    }
+    @Override
+    public List<Activity> getActivitiesOfType(TypeActivity typeActivity){
+        return  activityRepository.findAllByTypeActivity(typeActivity);
+    }
+
+
 
 
 

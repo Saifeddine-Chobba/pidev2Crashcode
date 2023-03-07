@@ -4,8 +4,10 @@ package tn.esprit.pidevcrashcode.Services;
 import tn.esprit.pidevcrashcode.Entities.Activity;
 import tn.esprit.pidevcrashcode.Entities.CampingCenter;
 import tn.esprit.pidevcrashcode.Entities.Rating;
+import tn.esprit.pidevcrashcode.Entities.TypeActivity;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IActivityService {
     List<Activity> retrieveAllActivity();
@@ -18,7 +20,7 @@ public interface IActivityService {
 
     Activity retrieveActivity(Integer id);
 
-     void addActivityAndAssignToCamCenter(Activity activity,int idCampCenter);
+//     void addActivityAndAssignToCamCenter(Activity activity,int idCampCenter);
     float AverageRating (int activity);
 
     void  AddTofavorites (int idActivity,int idUser);
@@ -27,4 +29,7 @@ public interface IActivityService {
 
     List<Activity> suggestActivities (int idCampCenter);
 
+    public Set<Activity> suggestActivitiesByPreference(Set<Activity> preferences );
+
+    public List<Activity> getActivitiesOfType(TypeActivity typeActivity);
 }
