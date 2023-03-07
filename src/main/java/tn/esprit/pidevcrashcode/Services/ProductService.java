@@ -2,8 +2,8 @@ package tn.esprit.pidevcrashcode.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tn.esprit.pidevcrashcode.Entities.Product;
-import tn.esprit.pidevcrashcode.Repositories.ProductRepository;
+import tn.crashcode.campsidelocal.Entities.Product;
+import tn.crashcode.campsidelocal.Repositories.ProductRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +21,6 @@ public class ProductService {
     public Product createProduct(Product product) {
         return productRepository.save(product);
     }
-
     public Optional<Product> getProductById(int id) {
         return productRepository.findById(id);
     }

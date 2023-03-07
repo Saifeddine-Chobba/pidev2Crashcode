@@ -2,8 +2,8 @@ package tn.esprit.pidevcrashcode.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tn.esprit.pidevcrashcode.Entities.Ord;
-import tn.esprit.pidevcrashcode.Repositories.OrdRepository;
+import tn.crashcode.campsidelocal.Entities.Ord;
+import tn.crashcode.campsidelocal.Repositories.OrdRepository;
 
 import java.util.List;
 import java.util.Optional;

@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -20,13 +22,20 @@ public class Reaction implements Serializable {
     private int idReaction;
     @Enumerated(EnumType.STRING)
     private ReactionType reactionType;
-    @Temporal(TemporalType.DATE)
-    private Date date;
+    private Timestamp dateReaction=new Timestamp((new Date()).getTime());
     private String username;
     @ManyToOne()
-    private Post post; // hotha null ken reaction saret ala comment
+    private Post post;
     @ManyToOne()
     private Comment comment;
     @ManyToOne
     private User user;
+
+    @PrePersist
+    private void prePersist() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateReaction);
+        cal.add(Calendar.HOUR_OF_DAY, 1);
+        dateReaction = new Timestamp(cal.getTime().getTime());
+    }
 }

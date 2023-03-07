@@ -1,5 +1,6 @@
 package tn.esprit.pidevcrashcode.Entities;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
+
 
 @Entity
 @Getter
@@ -22,10 +26,16 @@ public class Comment implements Serializable {
     @Column(length = 1000)
     private String content;
     private String imageName;
-    @Temporal(TemporalType.TIME)
-    private Date commentDate;
+    private Timestamp dateComment=new Timestamp((new Date()).getTime());
     private boolean forbiddenWords = false ;
-
     @ManyToOne()
-    private Post post; //kif tfasakh post hethia twali NULL fil base ken bch testaamalha aaml condition bch mayaatikch NullPointerException wela chesmha
+    private Post post;
+    @PrePersist
+    private void prePersist() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateComment);
+        cal.add(Calendar.HOUR_OF_DAY, 1);
+        dateComment = new Timestamp(cal.getTime().getTime());
+    }
+
 }

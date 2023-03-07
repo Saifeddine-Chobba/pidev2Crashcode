@@ -1,18 +1,12 @@
 package tn.esprit.pidevcrashcode.Services;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidevcrashcode.Entities.Cart;
-import tn.esprit.pidevcrashcode.Entities.Product;
 import tn.esprit.pidevcrashcode.Repositories.CartRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartService {

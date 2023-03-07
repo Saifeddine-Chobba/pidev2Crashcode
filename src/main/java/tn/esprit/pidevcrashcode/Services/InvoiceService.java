@@ -14,7 +14,7 @@ public class InvoiceService {
 
 
     @Autowired
-    private  InvoiceRepository invoiceRepository;
+    private InvoiceRepository invoiceRepository;
     @Autowired
     private  OrdService ordService;
 

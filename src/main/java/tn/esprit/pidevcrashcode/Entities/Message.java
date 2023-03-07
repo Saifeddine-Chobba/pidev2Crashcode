@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -19,11 +21,18 @@ public class Message implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idMessage;
     private String text;
-    @Temporal(TemporalType.TIME)   //chouf l cours fih l format mtaa TIME
-    private Date date;
+    private Timestamp date=new Timestamp((new Date()).getTime());
 
     @ManyToOne
     private User user;
     @ManyToOne
     private Chatroom chatroom;
+    @PrePersist
+    private void prePersist() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.HOUR_OF_DAY, 1);
+        date = new Timestamp(cal.getTime().getTime());
+    }
+
 }
