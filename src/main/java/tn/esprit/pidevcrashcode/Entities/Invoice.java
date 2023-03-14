@@ -20,7 +20,7 @@ public class Invoice implements Serializable {
     private int idInvoice;
     @Enumerated(EnumType.STRING)
     private Status status;
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     @OneToOne
     private Ord order;

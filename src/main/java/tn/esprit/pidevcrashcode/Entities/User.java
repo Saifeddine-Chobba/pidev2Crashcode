@@ -1,5 +1,6 @@
 package tn.esprit.pidevcrashcode.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ public class User implements Serializable {
     @Column(unique = true)
     private String email;
     private String password;
+    private String phone;
 
     @ElementCollection(targetClass = Role.class)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -56,11 +58,17 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user" , cascade = CascadeType.REMOVE)
     private Set<Review> reviews = new HashSet<>();
 
+    @JsonIgnore
     @OneToOne(mappedBy = "user" , cascade = CascadeType.REMOVE)
     private Cart cart;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     private List<Notification> notifications = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private Set<Ord> orders = new HashSet<>();
+    @ManyToOne
+    private Deposit deposit;
 
 }

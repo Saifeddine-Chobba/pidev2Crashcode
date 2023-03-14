@@ -1,9 +1,6 @@
 package tn.esprit.pidevcrashcode.Services;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -13,64 +10,91 @@ import org.springframework.stereotype.Service;
 import tn.esprit.pidevcrashcode.Entities.Cart;
 import tn.esprit.pidevcrashcode.Entities.Product;
 import tn.esprit.pidevcrashcode.Repositories.CartRepository;
+import tn.esprit.pidevcrashcode.Repositories.UserRepository;
 
 @Service
 public class CartService implements ICartService {
 
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private  IProductService productService;
 
+    @Override
     public List<Cart> findAllCarts() {
         return cartRepository.findAll();
     }
 
-    public Optional<Cart> findCartById(int id) {
-        return cartRepository.findById(id);
+    @Override
+    public Cart getCart() {
+         Cart cart = userService.getCurrentUser().getCart();
+         if (cart == null){
+             cart = new Cart();
+             cart.setUser(userService.getCurrentUser());
+             saveCart(cart);
+             cart = userService.getCurrentUser().getCart();
+             return cart;
+         }
+         else{return cart;}
     }
 
+    @Override
     public void saveCart(Cart cart) {
         cartRepository.save(cart);
     }
 
-    public void deleteCartById(int id) {
-        cartRepository.deleteById(id);
-    }
 
-   /* public void deleteProductFromCart(Cart cart, Product product) {
-        Set<Product> products = cart.getProducts();
+    @Override
+    public void deleteProductFromCart(Product product) {
+        Cart cart = getCart();
+        List<Product> products = cart.getProducts();
+        List<Integer> amounts = cart.getAmounts();
         if (products.contains(product)) {
+            amounts.remove(products.indexOf(product));
             products.remove(product);
-            // Update the amounts field by removing the corresponding product quantity
-            List<List<Integer>> amountsList = deserializeAmounts(cart.getAmounts());
-            List<Integer> productAmount = Arrays.asList(product.getIdProduct(), 0);
-            amountsList.remove(productAmount);
-            String updatedAmounts = serializeAmounts(amountsList);
-            cart.setAmounts(updatedAmounts);
             cartRepository.save(cart);
         }
     }
 
-    // Utility method to serialize and deserialize the amounts field
-    private String serializeAmounts(List<List<Integer>> amountsList) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(amountsList);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
+    @Override
+    public void addProductToCart(Product product) {
+        Cart cart = getCart();
+        List<Product> products = cart.getProducts();
+        List<Integer> amounts = cart.getAmounts();
+        product.setAvailable(productService.isAvailable(product));
+        if (products.contains(product)){
+            int index = products.indexOf(product);
+            amounts.set(index,amounts.get(index)+1);
+            cart.setAmounts(amounts);
         }
+        else {
+            products.add(product);
+            amounts.add(1);
+            cart.setAmounts(amounts);
+            cart.setProducts(products);
+        }
+        saveCart(cart);
     }
 
-    private List<List<Integer>> deserializeAmounts(String amounts) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(amounts, new TypeReference<List<List<Integer>>>() {});
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
+    @Override
+    public void updateAmount(Product product, int quantity) {
+        Cart cart = getCart();
+        List<Integer> amounts = cart.getAmounts();
+        amounts.set(cart.getProducts().indexOf(product),quantity);
+        cart.setAmounts(amounts);
+        saveCart(cart);
         }
-    }
 
-    */
+
+
+    @Override
+    public void emptyCart(){
+        Cart cart = getCart();
+        cart.setAmounts(new ArrayList<>());
+        cart.setProducts(new ArrayList<>());
+        saveCart(cart);
+    }
 
 }

@@ -25,10 +25,10 @@ public class CampingCenter implements Serializable {
     @ElementCollection
     private List<String> pictures; //list feha asemi les images mtaa camping center
     private float rating;
-    private int capacity;
-    private int availableSpots;
-    @ElementCollection
-    private List<String> supportedActivities; // list feha asemi les activite  mawjoudin fi camp center
+    private int capacity; //kadech yhez men abd max
+    private int availableSpots; //kadech mn blasa mizelet mch reservé
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    private List<Activity> supportedActivities; // list feha les activite  mawjoudin fi camp center
     @Enumerated(EnumType.STRING)
     private  CampingCenterCategory category;
     private float price; //soum reservation 1 jour mtaa abd wehed
@@ -36,7 +36,6 @@ public class CampingCenter implements Serializable {
     @ManyToOne
     Location location;
     private boolean archived = false; //yethat archivé fi blaset ma yetfassakh bch maywalich campiongcenter null fi table okhrin
-
     //relations
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy="campingCenter")
     private Set<Rating> ratings = new HashSet<>();

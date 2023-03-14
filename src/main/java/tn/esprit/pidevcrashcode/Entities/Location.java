@@ -19,17 +19,16 @@ public class Location implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idLocation;
+    @Column(unique = true)
     private String name;
     private String state;
     private String town;
-    private String longitude;
-    private String lattitude;
+    @Column(unique = true)
+    private float longitude;
+    private float lattitude;
 
     @OneToMany( mappedBy="location" )
     private Set<CampingCenter> campingCenters = new HashSet<>();
-
-    @OneToMany(mappedBy = "location")
-    private Set<Ord> orders = new HashSet<>();
 
     @OneToMany(mappedBy = "location")
     private Set<User> users = new HashSet<>();

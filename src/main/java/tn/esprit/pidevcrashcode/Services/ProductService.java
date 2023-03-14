@@ -3,38 +3,65 @@ package tn.esprit.pidevcrashcode.Services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidevcrashcode.Entities.Product;
+import tn.esprit.pidevcrashcode.Entities.TypeActivity;
 import tn.esprit.pidevcrashcode.Repositories.ProductRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductService {
-
-    private final ProductRepository productRepository;
+public class ProductService implements IProductService {
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    private ProductRepository productRepository;
+
+    @Override
+    public void saveProduct(Product product) {
+        productRepository.save(product);
     }
 
-    public Product createProduct(Product product) {
-        return productRepository.save(product);
+    @Override
+    public void deleteProduct(Product product) {
+        productRepository.delete(product);
     }
 
-    public Optional<Product> getProductById(int id) {
-        return productRepository.findById(id);
+    @Override
+    public void updateProduct(Product productOld, Product productNew) {
+        productOld.setName(productNew.getName());
+        productOld.setCategory(productNew.getCategory());
+        productOld.setPrice(productNew.getPrice());
+        productOld.setDiscountPercent(productNew.getDiscountPercent());
+        saveProduct(productOld);
     }
 
-    public List<Product> getAllProducts() {
+    @Override
+    public Product findProductById(int id) {
+        Optional<Product> product = productRepository.findById(id);
+        return product.orElse(null);
+    }
+
+    @Override
+    public List<Product> findAllProducts() {
         return productRepository.findAll();
     }
 
-    public Product updateProduct(Product product) {
-        return productRepository.save(product);
+    @Override
+    public List<Product> findProductsByCategory(TypeActivity category) {
+        return productRepository.findAllByCategory(category);
     }
 
-    public void deleteProductById(int id) {
-        productRepository.deleteById(id);
+    @Override
+    public float getDiscountedPrice(Product product){
+        float price = product.getPrice();
+        float discountPercent = product.getDiscountPercent();
+        return price * discountPercent / 100 ;
+    }
+
+    @Override
+    public boolean isAvailable(Product product) {
+        if (product.getDeposits().isEmpty()){
+            return  false;
+        }
+        return  true;
     }
 }

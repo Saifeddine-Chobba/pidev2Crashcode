@@ -4,5 +4,6 @@ public enum Status {
     Ongoing,
     Cancelled,
     Resolved,
-    Waiting
+    Waiting,
+    Supplying,
 }

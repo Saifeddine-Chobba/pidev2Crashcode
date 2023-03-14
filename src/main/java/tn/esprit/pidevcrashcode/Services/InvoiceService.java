@@ -2,43 +2,69 @@ package tn.esprit.pidevcrashcode.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tn.esprit.pidevcrashcode.Entities.Invoice;
-import tn.esprit.pidevcrashcode.Entities.Ord;
+import tn.esprit.pidevcrashcode.Entities.*;
 import tn.esprit.pidevcrashcode.Repositories.InvoiceRepository;
+import tn.esprit.pidevcrashcode.Repositories.OrdRepository;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
-public class InvoiceService {
-
+public class InvoiceService implements IInvoiceService {
 
     @Autowired
-    private  InvoiceRepository invoiceRepository;
-    @Autowired
-    private  OrdService ordService;
+    private InvoiceRepository invoiceRepository;
 
-    public InvoiceService(InvoiceRepository invoiceRepository, OrdService ordService) {
-        this.invoiceRepository = invoiceRepository;
-        this.ordService = ordService;
+    @Autowired
+    private OrdRepository ordRepository;
+
+    @Override
+    public void saveInvoice(Invoice invoice) {
+        invoiceRepository.save(invoice);
     }
 
-    public List<Invoice> getAllInvoices() {
+    @Override
+    public void updateStatus(Invoice invoice, Status status) {
+        invoice.setStatus(status);
+        invoiceRepository.save(invoice);
+    }
+
+    @Override
+    public void updatePaymentDate(Invoice invoice, Date paymentDate) {
+        invoice.setDate(paymentDate);
+        invoiceRepository.save(invoice);
+    }
+
+    @Override
+    public List<Invoice> findAllInvoices() {
         return invoiceRepository.findAll();
     }
 
-    public Optional<Invoice> getInvoiceById(int id) {
+    @Override
+    public Invoice findInvoiceByOrder(Ord order) {
+        Optional<Invoice> optionalInvoice = invoiceRepository.findByOrder(order);
+        return optionalInvoice.orElse(null);
+    }
+
+    @Override
+    public List<Invoice> findInvoicesByUser(User user) {
+        List<Ord> orders = ordRepository.findAllByUser(user);
+        List<Invoice> invoices = new ArrayList<>();
+        for (Ord order : orders) {
+            Invoice invoice = findInvoiceByOrder(order);
+            if (invoice != null) {
+                invoices.add(invoice);
+            }
+        }
+        return invoices;
+    }
+
+    @Override
+    public Optional<Invoice> findInvoiceById(int id) {
         return invoiceRepository.findById(id);
     }
 
-    public Invoice createInvoice(Invoice invoice) {
-        Ord order = ordService.getOrdById(invoice.getOrder().getIdOrder()).orElseThrow(() -> new RuntimeException("Order not found"));
-        invoice.setOrder(order);
-        return invoiceRepository.save(invoice);
-    }
 
-    public void deleteInvoiceById(int id) {
-        invoiceRepository.deleteById(id);
-    }
+
 
 }
+
