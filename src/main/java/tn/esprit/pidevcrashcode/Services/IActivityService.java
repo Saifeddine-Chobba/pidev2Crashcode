@@ -6,6 +6,7 @@ import tn.esprit.pidevcrashcode.Entities.CampingCenter;
 import tn.esprit.pidevcrashcode.Entities.Rating;
 import tn.esprit.pidevcrashcode.Entities.TypeActivity;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -32,4 +33,8 @@ public interface IActivityService {
     public Set<Activity> suggestActivitiesByPreference(Set<Activity> preferences );
 
     public List<Activity> getActivitiesOfType(TypeActivity typeActivity);
+
+    public List getDataFromCSVFile();
+
+    void main(String[] args) throws IOException;
 }

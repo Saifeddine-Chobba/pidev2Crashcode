@@ -1,10 +1,13 @@
 package tn.esprit.pidevcrashcode.Controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.pidevcrashcode.Entities.Complaint;
 import tn.esprit.pidevcrashcode.Entities.Notification;
+import tn.esprit.pidevcrashcode.Entities.SMSSendRequest;
 import tn.esprit.pidevcrashcode.Services.INotificationService;
+import tn.esprit.pidevcrashcode.Services.SMSServices;
 
 import java.util.List;
 
@@ -13,6 +16,8 @@ import java.util.List;
 @RequestMapping("/notification")
 public class NotificatonControleur {
 
+    @Autowired
+    SMSServices smsServices;
     INotificationService iNotificationService;
     @GetMapping("/retriveAllnotification")
     public List<Notification> getnotification(){
@@ -41,4 +46,10 @@ public class NotificatonControleur {
     public void AddNotificationAndAssignToUser(@RequestBody  Notification notification ,@PathVariable("iduser")int idUser){
         iNotificationService.AddNotificationAndAssignToUser(notification,idUser);
     }
+
+    @PostMapping("/processSMS")
+    public String processSMS(@RequestBody SMSSendRequest sendRequest){
+        return smsServices.sendSMS(sendRequest.getDestinationSMSNumber(),sendRequest.getSmsMessages());
+    }
+
 }

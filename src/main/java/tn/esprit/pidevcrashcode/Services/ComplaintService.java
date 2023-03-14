@@ -1,7 +1,6 @@
 package tn.esprit.pidevcrashcode.Services;
 
 
-import edu.stanford.nlp.ling.CoreAnnotations;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import tn.esprit.pidevcrashcode.Entities.User;
 import tn.esprit.pidevcrashcode.Repositories.ComplaintRepository;
 import tn.esprit.pidevcrashcode.Repositories.UserRepository;
 import edu.stanford.nlp.pipeline.*;
-import edu.stanford.nlp.ling.CoreAnnotations.*;
 
 import java.util.*;
 

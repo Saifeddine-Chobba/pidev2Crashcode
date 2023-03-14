@@ -1,5 +1,6 @@
 package tn.esprit.pidevcrashcode.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class Activity implements Serializable {
 
     @OneToMany(mappedBy = "activity" , cascade = CascadeType.REMOVE,orphanRemoval = true)
     private Set<ActivityRating> activityRatings = new HashSet<>();
+    @JsonIgnore
     @ManyToMany(mappedBy = "favoriteActivities",cascade = CascadeType.REMOVE)
     private Set<User> favoringUserSet;
 //    @ManyToMany(mappedBy = "supportedActivities")

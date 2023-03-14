@@ -4,10 +4,7 @@ package tn.esprit.pidevcrashcode.Controllers;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.pidevcrashcode.Entities.Activity;
-import tn.esprit.pidevcrashcode.Entities.Complaint;
-import tn.esprit.pidevcrashcode.Entities.TypeActivity;
-import tn.esprit.pidevcrashcode.Entities.User;
+import tn.esprit.pidevcrashcode.Entities.*;
 import tn.esprit.pidevcrashcode.Services.IActivityService;
 import tn.esprit.pidevcrashcode.Services.UserService;
 
@@ -75,6 +72,17 @@ public class ActivityControleur {
         Set<Activity> preferences = user.getFavoriteActivities();
         return iActivityService.suggestActivitiesByPreference(preferences);
     }
+
+   /* @GetMapping("/suggestActivitiesByUserType")
+    public String suggestActivitiesByUserType (){
+
+        User user = userService.getCurrentUser();
+        Gender gender = user.getGender();
+        String age = user.getAge();
+        String state = user.getLocation().getState();
+        List list = IActivityService.getDataFromCSVFile();
+        return list;
+    }*/
 
 
 
