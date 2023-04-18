@@ -3,6 +3,7 @@ package tn.esprit.pidevcrashcode.Controllers;
 
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
 
 public class AuthController {
 
+    @Autowired
     AuthenticationManager authenticationManager;
 
     @Autowired
@@ -56,6 +58,7 @@ public class AuthController {
     JwtUtils jwtUtils;
     @Autowired
     UserService UserService;
+
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Validated @RequestBody LoginRequest loginRequest) throws IOException, GeoIp2Exception {
